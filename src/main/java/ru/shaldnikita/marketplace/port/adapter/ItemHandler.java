@@ -43,10 +43,12 @@ public class ItemHandler {
 
     @GetMapping("items")
     public List<ItemModel> getItems(@RequestParam(value = "OrderBy", defaultValue = "ASCENDING") Sort sort,
-                                    @RequestParam(value = "category", required = false) ItemCategory category) {
+                                    @RequestParam(value = "Category", required = false) ItemCategory category,
+                                    @RequestParam(value = "MinRating", defaultValue = "0") int minRating) {
         return sort.sort().apply(repository)
             .stream()
             .filter(item -> Objects.isNull(category) || item.getCategory() == category )
+            .filter(item -> item.getRating() >= minRating)
             .map(item -> new ItemModel(
                 item.getItemId(),
                 item.getName(),
