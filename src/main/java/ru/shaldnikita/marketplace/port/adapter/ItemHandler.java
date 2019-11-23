@@ -50,19 +50,19 @@ public class ItemHandler {
                                     @RequestParam(value = "Category", required = false) ItemCategory category,
                                     @RequestParam(value = "MinRating", defaultValue = "0") int minRating) {
         return sort.sort().apply(itemRepository)
-            .stream()
-            .filter(item -> Objects.isNull(category) || item.getCategory() == category )
-            .filter(item -> item.getRating() >= minRating)
-            .map(item -> new ItemModel(
-                item.getItemId(),
-                item.getName(),
-                item.getDescription(),
-                item.getCategory().toString(),
-                item.getPrice(),
-                item.getRating(),
-                item.getFile()
-            ))
-            .collect(Collectors.toList());
+                .stream()
+                .filter(item -> Objects.isNull(category) || item.getCategory() == category)
+                .filter(item -> item.getRating() >= minRating)
+                .map(item -> new ItemModel(
+                        item.getItemId(),
+                        item.getName(),
+                        item.getDescription(),
+                        item.getCategory().toString(),
+                        item.getPrice(),
+                        item.getRating(),
+                        item.getFile()
+                ))
+                .collect(Collectors.toList());
     }
 
     @GetMapping("items/categories")
