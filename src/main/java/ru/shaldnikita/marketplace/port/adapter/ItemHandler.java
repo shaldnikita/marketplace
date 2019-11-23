@@ -11,6 +11,7 @@ import ru.shaldnikita.marketplace.port.adapter.model.Sort;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -27,23 +28,25 @@ public class ItemHandler {
                              @RequestParam("price") int price,
                              @RequestParam("file") MultipartFile file) throws IOException {
         Item createdItem = repository.save(
-                new Item(
-                        UUID.randomUUID().toString(),
-                        name,
-                        description,
-                        price,
-                        0,
-                        file.getBytes(),
-                        ItemCategory.valueOf(category)
-                )
+            new Item(
+                UUID.randomUUID().toString(),
+                name,
+                description,
+                price,
+                0,
+                file.getBytes(),
+                ItemCategory.valueOf(category)
+            )
         );
         return createdItem.getItemId();
     }
 
     @GetMapping("items")
-    public List<ItemModel> getItems(@RequestParam(value = "OrderBy", defaultValue = "ASCENDING") Sort sort) {
+    public List<ItemModel> getItems(@RequestParam(value = "OrderBy", defaultValue = "ASCENDING") Sort sort,
+                                    @RequestParam(value = "category", required = false) ItemCategory category) {
         return sort.sort().apply(repository)
             .stream()
+            .filter(item -> Objects.isNull(category) || item.getCategory() == category )
             .map(item -> new ItemModel(
                 item.getItemId(),
                 item.getName(),
@@ -65,13 +68,13 @@ public class ItemHandler {
     public ItemModel getSingleItem(@PathVariable("id") String id) {
         Item item = repository.findByItemId(id);
         return new ItemModel(
-                item.getItemId(),
-                item.getName(),
-                item.getDescription(),
-                item.getCategory().toString(),
-                item.getPrice(),
-                item.getRating(),
-                item.getFile()
+            item.getItemId(),
+            item.getName(),
+            item.getDescription(),
+            item.getCategory().toString(),
+            item.getPrice(),
+            item.getRating(),
+            item.getFile()
         );
     }
 
