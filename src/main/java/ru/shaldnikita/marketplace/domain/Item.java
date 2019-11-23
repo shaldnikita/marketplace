@@ -31,14 +31,15 @@ public class Item {
 
     private int rating;
 
-
     @Lob
     private byte[] file;
 
-    public Item(String itemId, String name, String description, int price, int rating, byte[] file) {
+    public Item(String itemId, String name, String description, int price, int rating,
+                byte[] file, ItemCategory category) {
         this.itemId = itemId;
         this.name = name;
         this.description = description;
+        this.category = category;
         this.price = price;
         this.rating = rating;
         this.file = file;

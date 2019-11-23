@@ -14,6 +14,8 @@ public class ItemModel {
 
     private String description;
 
+    private String category;
+
     private int price;
 
     private int rating;

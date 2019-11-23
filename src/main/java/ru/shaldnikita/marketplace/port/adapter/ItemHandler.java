@@ -23,17 +23,19 @@ public class ItemHandler {
     @PostMapping("items")
     public String createItem(@RequestParam("name") String name,
                              @RequestParam("description") String description,
+                             @RequestParam("category") String category,
                              @RequestParam("price") int price,
                              @RequestParam("file") MultipartFile file) throws IOException {
         Item createdItem = repository.save(
-            new Item(
-                UUID.randomUUID().toString(),
-                name,
-                description,
-                price,
-                0,
-                file.getBytes()
-            )
+                new Item(
+                        UUID.randomUUID().toString(),
+                        name,
+                        description,
+                        price,
+                        0,
+                        file.getBytes(),
+                        ItemCategory.valueOf(category)
+                )
         );
         return createdItem.getItemId();
     }
@@ -46,6 +48,7 @@ public class ItemHandler {
                 item.getItemId(),
                 item.getName(),
                 item.getDescription(),
+                item.getCategory().toString(),
                 item.getPrice(),
                 item.getRating(),
                 item.getFile()
@@ -53,16 +56,22 @@ public class ItemHandler {
             .collect(Collectors.toList());
     }
 
+    @GetMapping("items/categories")
+    public ItemCategory[] getCategories() {
+        return ItemCategory.values();
+    }
+
     @GetMapping("items/{id}")
     public ItemModel getSingleItem(@PathVariable("id") String id) {
         Item item = repository.findByItemId(id);
         return new ItemModel(
-            item.getItemId(),
-            item.getName(),
-            item.getDescription(),
-            item.getPrice(),
-            item.getRating(),
-            item.getFile()
+                item.getItemId(),
+                item.getName(),
+                item.getDescription(),
+                item.getCategory().toString(),
+                item.getPrice(),
+                item.getRating(),
+                item.getFile()
         );
     }
 
