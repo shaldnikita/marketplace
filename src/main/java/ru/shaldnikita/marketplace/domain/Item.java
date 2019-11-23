@@ -1,17 +1,22 @@
 package ru.shaldnikita.marketplace.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Lob;
-import java.util.List;
 
 @Entity
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Item {
 
     @Id
+    @GeneratedValue
     private Long id;
 
     private String itemId;
@@ -25,5 +30,14 @@ public class Item {
     private int rating;
 
     @Lob
-    private List<Byte> file;
+    private Byte[] file;
+
+    public Item(String itemId, String name, String description, int price, int rating, Byte[] file) {
+        this.itemId = itemId;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.rating = rating;
+        this.file = file;
+    }
 }
