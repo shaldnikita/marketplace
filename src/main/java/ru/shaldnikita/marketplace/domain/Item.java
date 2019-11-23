@@ -23,11 +23,14 @@ public class Item {
 
     private String name;
 
+    private ItemCategory category;
+
     private String description;
 
     private int price;
 
     private int rating;
+
 
     @Lob
     private byte[] file;

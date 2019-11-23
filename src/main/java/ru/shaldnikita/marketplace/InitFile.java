@@ -26,6 +26,7 @@ public class InitFile implements CommandLineRunner {
                 new byte[]{1, 2, 3}
         );
 
+
         Item item2 = new Item(
                 UUID.randomUUID().toString(),
                 "Item2",
