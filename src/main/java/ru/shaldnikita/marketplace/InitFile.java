@@ -23,7 +23,7 @@ public class InitFile implements CommandLineRunner {
                 "Item1 description",
                 100000,
                 0,
-                new Byte[]{1, 2, 3}
+                new byte[]{1, 2, 3}
         );
 
         Item item2 = new Item(
@@ -32,7 +32,7 @@ public class InitFile implements CommandLineRunner {
                 "Item2 description",
                 200000,
                 5,
-                new Byte[]{1, 2, 3}
+                new byte[]{1, 2, 3}
         );
 
         Item item3 = new Item(
@@ -41,7 +41,7 @@ public class InitFile implements CommandLineRunner {
                 "Item3 description",
                 300000,
                 3,
-                new Byte[]{1, 2, 3}
+                new byte[]{1, 2, 3}
         );
 
         repository.save(item1);

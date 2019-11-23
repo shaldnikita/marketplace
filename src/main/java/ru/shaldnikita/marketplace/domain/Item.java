@@ -30,9 +30,9 @@ public class Item {
     private int rating;
 
     @Lob
-    private Byte[] file;
+    private byte[] file;
 
-    public Item(String itemId, String name, String description, int price, int rating, Byte[] file) {
+    public Item(String itemId, String name, String description, int price, int rating, byte[] file) {
         this.itemId = itemId;
         this.name = name;
         this.description = description;

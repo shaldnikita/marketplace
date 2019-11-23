@@ -14,7 +14,5 @@ public class CreateItemModel {
 
     private int price;
 
-    private int rating;
-
     private Byte[] file;
 }

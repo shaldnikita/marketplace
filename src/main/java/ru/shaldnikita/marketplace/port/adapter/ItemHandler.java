@@ -2,11 +2,12 @@ package ru.shaldnikita.marketplace.port.adapter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import ru.shaldnikita.marketplace.domain.Item;
 import ru.shaldnikita.marketplace.domain.ItemRepository;
-import ru.shaldnikita.marketplace.port.adapter.model.CreateItemModel;
 import ru.shaldnikita.marketplace.port.adapter.model.ItemModel;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -18,15 +19,18 @@ public class ItemHandler {
     private final ItemRepository repository;
 
     @PostMapping("items")
-    public String createItem(@RequestParam("item") CreateItemModel item) {
+    public String createItem(@RequestParam("name") String name,
+                             @RequestParam("description") String description,
+                             @RequestParam("price") int price,
+                             @RequestParam("file") MultipartFile file) throws IOException {
         Item createdItem = repository.save(
                 new Item(
                         UUID.randomUUID().toString(),
-                        item.getName(),
-                        item.getDescription(),
-                        item.getPrice(),
+                        name,
+                        description,
+                        price,
                         0,
-                        item.getFile()
+                        file.getBytes()
                 )
         );
         return createdItem.getItemId();

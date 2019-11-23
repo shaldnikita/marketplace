@@ -18,5 +18,5 @@ public class ItemModel {
 
     private int rating;
 
-    private Byte[] file;
+    private byte[] file;
 }
