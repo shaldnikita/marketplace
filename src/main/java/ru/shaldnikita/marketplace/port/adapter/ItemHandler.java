@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.shaldnikita.marketplace.domain.Item;
+import ru.shaldnikita.marketplace.domain.ItemCategory;
 import ru.shaldnikita.marketplace.domain.ItemRepository;
 import ru.shaldnikita.marketplace.port.adapter.model.ItemModel;
 
@@ -21,6 +22,7 @@ public class ItemHandler {
     @PostMapping("items")
     public String createItem(@RequestParam("name") String name,
                              @RequestParam("description") String description,
+                             @RequestParam("category") String category,
                              @RequestParam("price") int price,
                              @RequestParam("file") MultipartFile file) throws IOException {
         Item createdItem = repository.save(
@@ -30,7 +32,8 @@ public class ItemHandler {
                         description,
                         price,
                         0,
-                        file.getBytes()
+                        file.getBytes(),
+                        ItemCategory.valueOf(category)
                 )
         );
         return createdItem.getItemId();
@@ -43,11 +46,17 @@ public class ItemHandler {
                         item.getItemId(),
                         item.getName(),
                         item.getDescription(),
+                        item.getCategory().toString(),
                         item.getPrice(),
                         item.getRating(),
                         item.getFile()
                 ))
                 .collect(Collectors.toList());
+    }
+
+    @GetMapping("items/categories")
+    public ItemCategory[] getCategories() {
+        return ItemCategory.values();
     }
 
     @GetMapping("items/{id}")
@@ -57,6 +66,7 @@ public class ItemHandler {
                 item.getItemId(),
                 item.getName(),
                 item.getDescription(),
+                item.getCategory().toString(),
                 item.getPrice(),
                 item.getRating(),
                 item.getFile()
