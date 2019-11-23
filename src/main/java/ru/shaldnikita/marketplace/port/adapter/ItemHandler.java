@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.shaldnikita.marketplace.domain.Item;
+import ru.shaldnikita.marketplace.domain.ItemCategory;
 import ru.shaldnikita.marketplace.domain.ItemRepository;
 import ru.shaldnikita.marketplace.port.adapter.model.ItemModel;
+import ru.shaldnikita.marketplace.port.adapter.model.Sort;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,42 +26,43 @@ public class ItemHandler {
                              @RequestParam("price") int price,
                              @RequestParam("file") MultipartFile file) throws IOException {
         Item createdItem = repository.save(
-                new Item(
-                        UUID.randomUUID().toString(),
-                        name,
-                        description,
-                        price,
-                        0,
-                        file.getBytes()
-                )
+            new Item(
+                UUID.randomUUID().toString(),
+                name,
+                description,
+                price,
+                0,
+                file.getBytes()
+            )
         );
         return createdItem.getItemId();
     }
 
     @GetMapping("items")
-    public List<ItemModel> getItems() {
-        return repository.findAll().stream()
-                .map(item -> new ItemModel(
-                        item.getItemId(),
-                        item.getName(),
-                        item.getDescription(),
-                        item.getPrice(),
-                        item.getRating(),
-                        item.getFile()
-                ))
-                .collect(Collectors.toList());
-    }
-
-    @GetMapping("items/{id}")
-    public ItemModel getSingleItem(@PathVariable("id") String id) {
-        Item item = repository.findByItemId(id);
-        return new ItemModel(
+    public List<ItemModel> getItems(@RequestParam(value = "OrderBy", defaultValue = "ASCENDING") Sort sort) {
+        return sort.sort().apply(repository)
+            .stream()
+            .map(item -> new ItemModel(
                 item.getItemId(),
                 item.getName(),
                 item.getDescription(),
                 item.getPrice(),
                 item.getRating(),
                 item.getFile()
+            ))
+            .collect(Collectors.toList());
+    }
+
+    @GetMapping("items/{id}")
+    public ItemModel getSingleItem(@PathVariable("id") String id) {
+        Item item = repository.findByItemId(id);
+        return new ItemModel(
+            item.getItemId(),
+            item.getName(),
+            item.getDescription(),
+            item.getPrice(),
+            item.getRating(),
+            item.getFile()
         );
     }
 
