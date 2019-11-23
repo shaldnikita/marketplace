@@ -3,37 +3,41 @@ package ru.shaldnikita.marketplace.port.adapter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import ru.shaldnikita.marketplace.domain.Item;
-import ru.shaldnikita.marketplace.domain.ItemCategory;
-import ru.shaldnikita.marketplace.domain.ItemRepository;
+import ru.shaldnikita.marketplace.domain.*;
 import ru.shaldnikita.marketplace.port.adapter.model.ItemModel;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-@RestController("/")
+@RestController
 @RequiredArgsConstructor
 public class ItemHandler {
 
-    private final ItemRepository repository;
+    private final ItemRepository itemRepository;
+
+    private final UserRepository userRepository;
 
     @PostMapping("items")
     public String createItem(@RequestParam("name") String name,
                              @RequestParam("description") String description,
-                             @RequestParam("category") String category,
+                             @RequestParam("category") ItemCategory category,
                              @RequestParam("price") int price,
+                             @RequestParam("ownerId") String ownerId,
                              @RequestParam("file") MultipartFile file) throws IOException {
-        Item createdItem = repository.save(
+        Item createdItem = itemRepository.save(
                 new Item(
                         UUID.randomUUID().toString(),
                         name,
+                        category,
                         description,
                         price,
                         0,
-                        file.getBytes(),
-                        ItemCategory.valueOf(category)
+                        new ArrayList<Comment>(),
+                        userRepository.findByUserId(ownerId),
+                        file.getBytes()
                 )
         );
         return createdItem.getItemId();
@@ -41,7 +45,7 @@ public class ItemHandler {
 
     @GetMapping("items")
     public List<ItemModel> getItems() {
-        return repository.findAll().stream()
+        return itemRepository.findAll().stream()
                 .map(item -> new ItemModel(
                         item.getItemId(),
                         item.getName(),
@@ -61,7 +65,7 @@ public class ItemHandler {
 
     @GetMapping("items/{id}")
     public ItemModel getSingleItem(@PathVariable("id") String id) {
-        Item item = repository.findByItemId(id);
+        Item item = this.itemRepository.findByItemId(id);
         return new ItemModel(
                 item.getItemId(),
                 item.getName(),

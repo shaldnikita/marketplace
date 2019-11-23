@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.time.LocalDateTime;
 
 /**
@@ -29,15 +30,36 @@ public class Comment {
 
     private String content;
 
+    private int rating;
+
     private int likes;
 
     private byte[] image;
 
-    public Comment(String commentId, String name, LocalDateTime date, String content, int likes, byte[] image) {
+    @ManyToOne
+    private Item item;
+
+    @ManyToOne
+    private User author;
+
+    public Comment(String commentId, String name, LocalDateTime date, String content, int rating, int likes, byte[] image, Item item, User author) {
         this.commentId = commentId;
         this.name = name;
         this.date = date;
         this.content = content;
+        this.rating = rating;
+        this.likes = likes;
+        this.image = image;
+        this.item = item;
+        this.author = author;
+    }
+
+    public Comment(String commentId, String name, LocalDateTime date, String content, int rating, int likes, byte[] image) {
+        this.commentId = commentId;
+        this.name = name;
+        this.date = date;
+        this.content = content;
+        this.rating = rating;
         this.likes = likes;
         this.image = image;
     }
