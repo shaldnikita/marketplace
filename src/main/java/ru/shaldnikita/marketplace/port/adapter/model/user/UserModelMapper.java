@@ -10,7 +10,7 @@ public class UserModelMapper {
                 createUser.getName(),
                 createUser.getLogin(),
                 createUser.getEmail(),
-                createUser.getPasswordBase64Encoded()
+                createUser.getPassword()
         );
     }
 

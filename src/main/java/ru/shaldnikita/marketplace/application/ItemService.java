@@ -11,6 +11,7 @@ import ru.shaldnikita.marketplace.port.adapter.model.Sort;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -63,7 +64,7 @@ public class ItemService {
     public List<Item> findAllSorted(Sort sort, ItemCategory category, int minRating) {
         return sort.sort().apply(itemRepository)
                 .stream()
-                .filter(item -> item.getCategory() == category)
+                .filter(item -> Objects.isNull(category) || item.getCategory() == category)
                 .filter(item -> item.getRating() >= minRating)
                 .map(item -> new Item(
                         item.getItemId(),

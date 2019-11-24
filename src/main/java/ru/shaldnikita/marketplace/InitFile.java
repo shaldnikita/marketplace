@@ -3,12 +3,17 @@ package ru.shaldnikita.marketplace;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-import ru.shaldnikita.marketplace.domain.*;
+import ru.shaldnikita.marketplace.domain.Comment;
+import ru.shaldnikita.marketplace.domain.Item;
+import ru.shaldnikita.marketplace.domain.ItemCategory;
+import ru.shaldnikita.marketplace.domain.User;
 import ru.shaldnikita.marketplace.domain.repo.CommentRepository;
 import ru.shaldnikita.marketplace.domain.repo.ItemRepository;
 import ru.shaldnikita.marketplace.domain.repo.UserRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,116 +37,129 @@ public class InitFile implements CommandLineRunner {
                 UUID.randomUUID().toString(),
                 "Vasya",
                 "vasua1",
-                "vasya1@mail.ru"
+                "vasya1@mail.ru",
+                new String(Base64.getDecoder().decode("password".getBytes()))
         );
         userRepository.save(user);
 
-        User user2 = new User(
+        User user1 = new User(
                 UUID.randomUUID().toString(),
                 "Alewa",
                 "alewa1",
-                "alewa1@mail.ru"
+                "alewa1@mail.ru",
+                new String(Base64.getDecoder().decode("password".getBytes()))
         );
-        userRepository.save(user2);
+        userRepository.save(user1);
 
         User author = new User(
                 UUID.randomUUID().toString(),
                 "Maxim",
                 "Maxim1",
-                "maxim1@mail.ru"
+                "maxim1@mail.ru",
+                new String(Base64.getDecoder().decode("password".getBytes()))
         );
         userRepository.save(author);
 
 
-        Comment comment = new Comment(
+        Item item1 = new Item(
                 UUID.randomUUID().toString(),
-                "huevo",
-                LocalDateTime.now(),
-                "Вообще ок, но не ок.",
+                author.getUserId(),
+                "Item1",
+                ItemCategory.APPLICATION,
+                "Item1 description",
+                100000,
                 1,
-                200,
-                new byte[]{});
-        commentRepository.save(comment);
+                null,
+                new ArrayList<>()
+        );
+        var item1Comments = List.of(
+                generateBadComment(item1.getItemId(), user.getUserId()),
+                generateGoodComment(item1.getItemId(), user1.getUserId())
+        );
+        item1.setCommentIds(item1Comments);
+        itemRepository.save(item1);
 
-        Comment comment1 = new Comment(
+
+        Item item2 = new Item(
+                UUID.randomUUID().toString(),
+                author.getUserId(),
+                "Item2",
+                ItemCategory.SERVICE,
+                "Item2 description",
+                200000,
+                5,
+                null,
+                new ArrayList<>()
+        );
+        var item2Comments = List.of(
+                generateBadComment(item2.getItemId(), user.getUserId()),
+                generateGoodComment(item2.getItemId(), user1.getUserId())
+        );
+        item2.setCommentIds(item2Comments);
+        itemRepository.save(item2);
+
+        Item item3 = new Item(
+                UUID.randomUUID().toString(),
+                author.getUserId(),
+                "Item3",
+                ItemCategory.APPLICATION,
+                "Item3 description",
+                300000,
+                3,
+                null,
+                new ArrayList<>()
+        );
+        var item3Comments = List.of(
+                generateBadComment(item3.getItemId(), user.getUserId()),
+                generateGoodComment(item3.getItemId(), user1.getUserId())
+        );
+        item3.setCommentIds(item3Comments);
+        itemRepository.save(item3);
+
+        Item item4 = new Item(
+                UUID.randomUUID().toString(),
+                author.getUserId(),
+                "Item4",
+                ItemCategory.SERVICE,
+                "Item4 description",
+                400000,
+                4,
+                null,
+                new ArrayList<>()
+        );
+        var item4Comments = List.of(
+                generateBadComment(item4.getItemId(), user.getUserId()),
+                generateGoodComment(item4.getItemId(), user1.getUserId())
+        );
+        item4.setCommentIds(item4Comments);
+        itemRepository.save(item4);
+    }
+
+    private String generateGoodComment(String itemId, String authorId) {
+        return commentRepository.save(new Comment(
                 UUID.randomUUID().toString(),
                 "Kruto",
                 LocalDateTime.now(),
                 "TOP",
                 5,
                 1,
-                new byte[]{});
-        commentRepository.save(comment1);
+                null,
+                itemId,
+                authorId
+        )).getCommentId();
+    }
 
-
-        Item item1 = new Item(
+    private String generateBadComment(String itemId, String authorId) {
+        return commentRepository.save(new Comment(
                 UUID.randomUUID().toString(),
-                "Item1",
-                ItemCategory.APPLICATION,
-                "Item1 description",
-                100000,
-                0,
-                List.of(comment, comment1),
-                author,
-                new byte[]{1, 2, 3}
-        );
-
-
-        Item item2 = new Item(
-                UUID.randomUUID().toString(),
-                "Item2",
-                ItemCategory.SERVICE,
-                "Item2 description",
-                200000,
-                5,
-                List.of(comment, comment1),
-                author,
-                new byte[]{1, 2, 3}
-        );
-
-        Item item3 = new Item(
-                UUID.randomUUID().toString(),
-                "Item3",
-                ItemCategory.APPLICATION,
-                "Item3 description",
-                300000,
-                3,
-                List.of(comment, comment1),
-                author,
-                new byte[]{1, 2, 3}
-        );
-
-        Item item4 = new Item(
-                UUID.randomUUID().toString(),
-                "Item4",
-                ItemCategory.SERVICE,
-                "Item4 description",
-                400000,
-                4,
-                List.of(comment, comment1),
-                author,
-                new byte[]{1, 2, 3}
-        );
-
-        item1.setOwner(author);
-        item2.setOwner(author);
-        item3.setOwner(author);
-        item4.setOwner(author);
-
-        item1.setComments(List.of(comment1, comment));
-        item2.setComments(List.of(comment1, comment));
-        item3.setComments(List.of(comment1, comment));
-        item4.setComments(List.of(comment1, comment));
-
-        comment.setAuthor(user);
-        comment1.setAuthor(user2);
-
-        author.setItems(List.of(item1, item2, item3, item4));
-
-
-        itemRepository.save(item1);
-        itemRepository.save(item2);
-        itemRepository.save(item3);
-        itemRepository.save(item4);
+                "Huevo",
+                LocalDateTime.now(),
+                "O4en ploho",
+                1,
+                400,
+                null,
+                itemId,
+                authorId
+        )).getCommentId();
     }
 }

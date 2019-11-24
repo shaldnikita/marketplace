@@ -2,15 +2,18 @@ package ru.shaldnikita.marketplace.port.adapter.model.comment;
 
 import ru.shaldnikita.marketplace.application.model.Comment;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+
 public class CommentModelMapper {
 
     public static Comment map(CreateCommentModel comment) {
         return new Comment(
                 null,
                 comment.getName(),
-                comment.getDate(),
+                LocalDateTime.now(ZoneId.of("UTC+3")),
                 comment.getContent(),
-                null,
+                0,
                 0,
                 comment.getImage(),
                 comment.getItemId(),

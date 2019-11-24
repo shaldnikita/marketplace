@@ -28,9 +28,9 @@ public class Comment {
 
     private String content;
 
-    private Integer rating;
+    private int rating;
 
-    private Integer likes;
+    private int likes;
 
     @Lob
     private Byte[] image;
@@ -39,7 +39,7 @@ public class Comment {
 
     private String authorId;
 
-    public Comment(String commentId, String name, LocalDateTime date, String content, Integer rating, Integer likes, Byte[] image, String itemId, String authorId) {
+    public Comment(String commentId, String name, LocalDateTime date, String content, int rating, int likes, Byte[] image, String itemId, String authorId) {
         this.commentId = commentId;
         this.name = name;
         this.date = date;

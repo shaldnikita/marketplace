@@ -5,16 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.lang.Nullable;
 
-import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateCommentModel {
 
     private String name;
-
-    private LocalDateTime date;
 
     private String content;
 

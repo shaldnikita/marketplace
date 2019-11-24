@@ -19,14 +19,14 @@ public class ItemHandler {
     private final ItemService itemService;
 
     @PostMapping("items")
-    public ItemModel createItem(CreateItemModel item) {
+    public ItemModel createItem(@RequestBody CreateItemModel item) {
         return ItemModelMapper.unmap(itemService.create(ItemModelMapper.map(item)));
     }
 
     @GetMapping("items")
-    public List<ItemModel> getItems(@RequestParam(value = "OrderBy", defaultValue = "ASCENDING") Sort sort,
-                                    @RequestParam(value = "Category", required = false) ItemCategory category,
-                                    @RequestParam(value = "MinRating", defaultValue = "0") int minRating) {
+    public List<ItemModel> getItems(@RequestParam(value = "orderByPrice", defaultValue = "ASCENDING") Sort sort,
+                                    @RequestParam(value = "category", required = false) ItemCategory category,
+                                    @RequestParam(value = "minRating", defaultValue = "0") int minRating) {
         return itemService.findAllSorted(sort, category, minRating).stream().map(ItemModelMapper::unmap).collect(Collectors.toList());
     }
 

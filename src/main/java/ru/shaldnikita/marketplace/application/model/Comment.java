@@ -17,7 +17,7 @@ public class Comment {
 
     private String content;
 
-    private Integer rating;
+    private int rating;
 
     private int likes;
 

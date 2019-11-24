@@ -3,8 +3,13 @@ package ru.shaldnikita.marketplace.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
-import javax.persistence.*;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.List;
 
 @Entity
@@ -26,10 +31,12 @@ public class User {
 
     private String passwordHash;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<String> commentsIds;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<String> itemsIds;
 
 
