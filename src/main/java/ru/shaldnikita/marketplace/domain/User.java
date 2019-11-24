@@ -24,25 +24,30 @@ public class User {
 
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "author")
-    private List<Comment> comments;
+    private String passwordHash;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "owner")
-    private List<Item> items;
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> commentsIds;
 
-    public User(String userId, String name, String login, String email, List<Comment> comments, List<Item> items) {
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> itemsIds;
+
+
+    public User(String userId, String name, String login, String email, String passwordHash, List<String> commentsIds, List<String> itemsIds) {
         this.userId = userId;
         this.name = name;
         this.login = login;
         this.email = email;
-        this.comments = comments;
-        this.items = items;
+        this.passwordHash = passwordHash;
+        this.commentsIds = commentsIds;
+        this.itemsIds = itemsIds;
     }
 
-    public User(String userId, String name, String login, String email) {
+    public User(String userId, String name, String login, String email, String passwordHash) {
         this.userId = userId;
         this.name = name;
         this.login = login;
         this.email = email;
+        this.passwordHash = passwordHash;
     }
 }

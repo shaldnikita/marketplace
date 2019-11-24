@@ -2,39 +2,34 @@ package ru.shaldnikita.marketplace.port.adapter;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import ru.shaldnikita.marketplace.application.UserService;
 import ru.shaldnikita.marketplace.domain.User;
-import ru.shaldnikita.marketplace.domain.UserRepository;
+import ru.shaldnikita.marketplace.port.adapter.model.user.CreateUserModel;
+import ru.shaldnikita.marketplace.port.adapter.model.user.UserModel;
+import ru.shaldnikita.marketplace.port.adapter.model.user.UserModelMapper;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
 public class UserHandler {
 
-    private final UserRepository repository;
+    private final UserService userService;
 
     @GetMapping("users")
-    public List<User> findAll() {
-        return repository.findAll();
+    public List<UserModel> findAll() {
+        return userService.findAll().stream().map(UserModelMapper::unmap).collect(Collectors.toList());
     }
 
     @GetMapping("users/{id}")
-    public User findOne(@PathVariable("id") String userId) {
-        return repository.findByUserId(userId);
+    public UserModel findOne(@PathVariable("id") String userId) {
+        return UserModelMapper.unmap(userService.findByUserId(userId));
     }
 
     @PostMapping("users")
-    public String create(@RequestParam("login") String login,
-                         @RequestParam("email") String email,
-                         @RequestParam("name") String name) {
-        return repository.save(
-                new User(
-                        UUID.randomUUID().toString(),
-                        name,
-                        login,
-                        email
-                )
-        ).getUserId();
+    public UserModel create(@RequestParam CreateUserModel user) {
+        return UserModelMapper.unmap(userService.createUser(UserModelMapper.map(user)));
     }
 }

@@ -4,6 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import ru.shaldnikita.marketplace.domain.*;
+import ru.shaldnikita.marketplace.domain.repo.CommentRepository;
+import ru.shaldnikita.marketplace.domain.repo.ItemRepository;
+import ru.shaldnikita.marketplace.domain.repo.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;

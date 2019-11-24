@@ -19,6 +19,8 @@ public class Item {
 
     private String itemId;
 
+    private String ownerId;
+
     private String name;
 
     private ItemCategory category;
@@ -29,29 +31,28 @@ public class Item {
 
     private int rating;
 
-    @OneToMany(mappedBy = "item")
-    private List<Comment> comments;
-
-    @ManyToOne
-    private User owner;
-
     @Lob
-    private byte[] file;
+    private Byte[] file;
 
-    public Item(String itemId, String name, ItemCategory category, String description, int price, int rating, List<Comment> comments, User owner, byte[] file) {
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> commentIds;
+
+
+    public Item(String itemId, String ownerId, String name, ItemCategory category, String description, int price, int rating, Byte[] file, List<String> commentIds) {
         this.itemId = itemId;
+        this.ownerId = ownerId;
         this.name = name;
         this.category = category;
         this.description = description;
         this.price = price;
         this.rating = rating;
-        this.comments = comments;
-        this.owner = owner;
         this.file = file;
+        this.commentIds = commentIds;
     }
 
-    public Item(String itemId, String name, ItemCategory category, String description, int price, int rating, byte[] file) {
+    public Item(String itemId, String ownerId, String name, ItemCategory category, String description, int price, int rating, Byte[] file) {
         this.itemId = itemId;
+        this.ownerId = ownerId;
         this.name = name;
         this.category = category;
         this.description = description;

@@ -1,13 +1,13 @@
-package ru.shaldnikita.marketplace.port.adapter.model;
+package ru.shaldnikita.marketplace.application.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
-public class UserModel {
+public class User {
+
+    private String userId;
 
     private String name;
 
@@ -15,4 +15,5 @@ public class UserModel {
 
     private String email;
 
+    private String passwordBase64Encoded;
 }

@@ -1,9 +1,8 @@
 package ru.shaldnikita.marketplace.port.adapter.model;
 
 import ru.shaldnikita.marketplace.domain.Item;
-import ru.shaldnikita.marketplace.domain.ItemRepository;
+import ru.shaldnikita.marketplace.domain.repo.ItemRepository;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
 

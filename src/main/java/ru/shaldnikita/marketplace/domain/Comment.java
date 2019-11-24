@@ -1,13 +1,12 @@
 package ru.shaldnikita.marketplace.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import javax.persistence.Lob;
 import java.time.LocalDateTime;
 
 /**
@@ -16,7 +15,6 @@ import java.time.LocalDateTime;
 @Entity
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Comment {
     @Id
     @GeneratedValue
@@ -30,19 +28,18 @@ public class Comment {
 
     private String content;
 
-    private int rating;
+    private Integer rating;
 
-    private int likes;
+    private Integer likes;
 
-    private byte[] image;
+    @Lob
+    private Byte[] image;
 
-    @ManyToOne
-    private Item item;
+    private String itemId;
 
-    @ManyToOne
-    private User author;
+    private String authorId;
 
-    public Comment(String commentId, String name, LocalDateTime date, String content, int rating, int likes, byte[] image, Item item, User author) {
+    public Comment(String commentId, String name, LocalDateTime date, String content, Integer rating, Integer likes, Byte[] image, String itemId, String authorId) {
         this.commentId = commentId;
         this.name = name;
         this.date = date;
@@ -50,17 +47,7 @@ public class Comment {
         this.rating = rating;
         this.likes = likes;
         this.image = image;
-        this.item = item;
-        this.author = author;
-    }
-
-    public Comment(String commentId, String name, LocalDateTime date, String content, int rating, int likes, byte[] image) {
-        this.commentId = commentId;
-        this.name = name;
-        this.date = date;
-        this.content = content;
-        this.rating = rating;
-        this.likes = likes;
-        this.image = image;
+        this.itemId = itemId;
+        this.authorId = authorId;
     }
 }
